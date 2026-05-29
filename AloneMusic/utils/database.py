@@ -48,7 +48,33 @@ pause = {}
 playmode = {}
 playtype = {}
 skipmode = {}
-
+def get_assistant_client():
+    try:
+        from AloneMusic import userbot
+        if hasattr(userbot, "one"):
+            return userbot.one
+        return userbot
+    except Exception:
+        try:
+            from AloneMusic import assistant
+            if hasattr(assistant, "one"):
+                return assistant.one
+            return assistant
+        except Exception:
+            pass
+    try:
+        import AloneMusic.misc as misc_module
+        for name in ['assistant', 'userbot', 'app2', 'clients']:
+            if hasattr(misc_module, name):
+                obj = getattr(misc_module, name)
+                if isinstance(obj, list) and len(obj) > 0:
+                    return obj[0]
+                elif hasattr(obj, "one"):
+                    return obj.one
+                return obj
+    except Exception:
+        pass
+    return None
 
 async def get_assistant_number(chat_id: int) -> str:
     assistant = assistantdict.get(chat_id)
